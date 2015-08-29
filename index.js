@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(require('cors' )());
 
-mongoose.connect('mongodb://localhost:27017/video', function (error) {
+mongoose.connect('mongodb://localhost:27017/mumandkid', function (error) {
     if (error) {
         console.log(error);
     }

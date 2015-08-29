@@ -7,7 +7,7 @@ var videoSchema = mongoose.Schema({
     name: String,
     image: String,
     url: String,
-    videocategory: { type: Schema.Types.ObjectId, ref: 'VideoCategory' }
+    channel: { type: Schema.Types.ObjectId, ref: 'Channel' }
 });
 
 /*videoSchema.methods.getOrders = function(){

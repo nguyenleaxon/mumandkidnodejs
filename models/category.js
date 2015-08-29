@@ -5,7 +5,7 @@ var mongoose = require('mongoose')
 var categorySchema = mongoose.Schema({
     name : String,
     description : String,
-    video :  { type: Schema.Types.ObjectId, ref: 'Video' },
+    video :  { type: Schema.Types.ObjectId, ref: 'Channel' },
     imagePath: String
 });
 
