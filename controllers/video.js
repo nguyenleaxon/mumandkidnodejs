@@ -21,19 +21,28 @@ module.exports = {
         console.dir(categoryID);
         console.dir(skipVideo);
 
-            Video.find({"videoCategory.$id": ObjectId(categoryID)}, function(err, video) {
-                if (err) return console .error (err);
-                res.json (video.map ( function(returnVideo){
-                    console.dir(returnVideo);
-                    return {
-                        id: returnVideo._id,
-                        name : returnVideo.name,
-                        image: returnVideo.image,
-                        url: returnVideo.url
-                    }
-                }));
-            }).sort("name").skip(skipVideo).limit(limitVideo);
+        Channel.find({"category.$id": ObjectId(categoryID)},'ObjectId',function(error,result){
+            console.dir("channel list" + result);
+            var channelList = new Array();
+            for(channelId in result){
+                channelList.push(result[channelId]._id);
+            }
+            Video.find({}).sort({'name':1}).skip(skipVideo).limit(5)
+                .where('channel.$id')
+                .in(channelList)
+                .exec(function(error,video){
+                    res.json (video.map ( function(returnVideo){
+                        return {
+                            id: returnVideo._id,
+                            name : returnVideo.name,
+                            image: returnVideo.image,
+                            url: returnVideo.url
 
+                        }
+                    }));
+
+                });
+        });
 
 
     },
@@ -67,7 +76,7 @@ module.exports = {
                 for(channelId in result){
                     channelList.push(result[channelId]._id);
                 }
-                Video.find({}).sort({'name':1}).skip(5).limit(5)
+                Video.find({}).sort({'name':1}).skip(skipVideo).limit(5)
                     .where('channel.$id')
                     .in(channelList)
                     .exec(function(error,video){
@@ -77,7 +86,7 @@ module.exports = {
                                 name : returnVideo.name,
                                 image: returnVideo.image,
                                 url: returnVideo.url,
-                                count:count
+                                total:count
                             }
                         }));
 
