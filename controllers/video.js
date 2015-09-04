@@ -18,9 +18,6 @@ module.exports = {
         var categoryID =  req.body.categoryID;
         var skipVideo = req.body.skip;
         var limitVideo = 5;
-        console.dir(categoryID);
-        console.dir(skipVideo);
-
         Channel.find({"category.$id": ObjectId(categoryID)},'ObjectId',function(error,result){
             console.dir("channel list" + result);
             var channelList = new Array();
@@ -68,10 +65,10 @@ module.exports = {
         var categoryID =  req.body.categoryID;
         var skipVideo = req.body.skip;
         var limitVideo = 5;
-        console.dir(categoryID);
+
         Video.count(function(err, count){
             Channel.find({"category.$id": ObjectId(categoryID)},'ObjectId',function(error,result){
-                console.dir("channel list" + result);
+
                 var channelList = new Array();
                 for(channelId in result){
                     channelList.push(result[channelId]._id);
