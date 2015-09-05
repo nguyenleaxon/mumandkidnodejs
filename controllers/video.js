@@ -8,11 +8,47 @@ module.exports = {
 
         app.post("/getAllVideoByCategory", this.getAllVideoByCategory);
         app.post("/getAllVideoFirstTime",this.getAllVideoFirstTime);
-        app.post("/findAllVideoByName",this.findAllVideoByName)
+        app.post("/findAllVideoByName",this.findAllVideoByName);
+        app.post("/getAllVideoByCategoryWeb",this.getAllVideoByCategoryWeb);
+        app.post("/deleteVideoWeb",this.deleteVideoWeb);
+
 
     },
 
+    deleteVideoWeb : function(req,res,next) {
+        var videoID =  req.body.videoID;
+         Video.find({"_id":ObjectId(videoID)}).remove().exec(function(error,value){
+            return res.json({ msgId: "done" })
+         });
+    },
 
+    getAllVideoByCategoryWeb : function(req, res, next) {
+        var categoryID =  req.body.categoryID;
+        var skipVideo = req.body.skip;
+
+        Channel.find({"category.$id": ObjectId(categoryID)},'ObjectId',function(error,result){
+            console.dir("channel list" + result);
+            var channelList = new Array();
+            for(channelId in result){
+                channelList.push(result[channelId]._id);
+            }
+            Video.find({}).sort({'name':1})
+                .where('channel.$id')
+                .in(channelList)
+                .exec(function(error,video){
+                    res.json (video.map ( function(returnVideo){
+                        return {
+                            id: returnVideo._id,
+                            name : returnVideo.name,
+                            image: returnVideo.image,
+                            url: returnVideo.url
+
+                        }
+                    }));
+
+                });
+        });
+    },
 
     getAllVideoByCategory: function (req, res, next) {
         var categoryID =  req.body.categoryID;

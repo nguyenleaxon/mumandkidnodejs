@@ -27,7 +27,10 @@ var handlebars = require('express3-handlebars' ).create({
     }
 
 });
+
 app.engine('handlebars', handlebars.engine);
+
+
 // set handle bar layout
 app.set('view engine','handlebars');
 //set application port
